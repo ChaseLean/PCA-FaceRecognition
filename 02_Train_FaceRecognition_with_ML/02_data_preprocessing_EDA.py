@@ -42,6 +42,9 @@ def get_size(path):
     return img.shape[0]
 
 
+# store dimension of image in this columns
+df['dimension'] = df['filepath'].apply(get_size)
+
 df.head()
 
 dist_gender = df['gender'].value_counts()
@@ -51,7 +54,6 @@ fig, ax = plt.subplots(nrows=1, ncols=2)
 dist_gender.plot(kind='bar', ax=ax[0])
 dist_gender.plot(kind='pie', ax=ax[1], autopct='%0.0f%%')
 plt.show()
-
 
 # What Distribution of size of all Images
 # Histogram
