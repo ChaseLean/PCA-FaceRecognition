@@ -38,7 +38,6 @@ def alignFace(img_path):
 	face_detector, eye_detector = get_detector()
 	img = cv2.imread(img_path)
 
-	print(img_path)
 	img_raw = img.copy()
 	img, gray_img = detectFace(img)
 	eyes = eye_detector.detectMultiScale(gray_img, 1.1, 5)
@@ -130,3 +129,5 @@ def normalize_face(images):
 		plt.show()
 	
 	return colored_images, grayscale_images
+
+normalize_face(["testing.jpg"])

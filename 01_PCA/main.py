@@ -3,8 +3,6 @@ import numpy as np
 import cv2
 import os
 from matplotlib import pyplot as plt
-from normalize_face import *
-
 
 # Sets the resolution of the image
 resolution = 200
@@ -66,25 +64,26 @@ for i in range(len(axes)):
         index += 1
 plt.show()
 
-# # The name of the test image
-# test_add = "2" + ".jpg"
-# test_img = cv2.imread(test_add)
+# The name of the test image
+test_add = "testing" + ".jpg"
+test_img = cv2.imread(test_add)
 
-# # Load and resize the test image
-# test_img = cv2.cvtColor(test_img, cv2.COLOR_RGB2GRAY)
-# test_img = cv2.resize(test_img, (resolution, resolution))
-# plt.title("Test face")
-# plt.imshow(test_img, cmap="gray")
-# plt.show()
+# Load and resize the test image
+test_img = cv2.cvtColor(test_img, cv2.COLOR_RGB2GRAY)
+test_img = cv2.resize(test_img, (resolution, resolution))
+plt.title("Test face")
+plt.imshow(test_img, cmap="gray")
+plt.show()
 
-# # Reshape, rescale and normalize the test image
-# test_img = test_img.reshape(total_pixels, 1)
-# test_normalized_face_vector = test_img - avg_face_vector
-# test_weight = np.transpose(test_normalized_face_vector).dot(np.transpose(eigen_faces))
+# Reshape, rescale and normalize the test image
+test_img = test_img.reshape(total_pixels, 1)
+test_normalized_face_vector = test_img - avg_face_vector
+test_weight = np.transpose(test_normalized_face_vector).dot(np.transpose(eigen_faces))
+print(test_weight.shape)
 
-# # Find the index inside the train data that best matches the test data, and print the index
-# index =  np.argmin(np.linalg.norm(test_weight - weights, axis=1))
-# distance = np.linalg.norm(test_weight - weights, axis=1)
-# distance = distance / np.sum(distance)
-# print(np.around(distance, 3))
-# print(index, labels[index], np.round(distance[index], 3))
+# Find the index inside the train data that best matches the test data, and print the index
+index =  np.argmin(np.linalg.norm(test_weight - weights, axis=1))
+distance = np.linalg.norm(test_weight - weights, axis=1)
+distance = distance / np.sum(distance)
+print(np.around(distance, 3))
+print(index, labels[index], np.round(distance[index], 3))
