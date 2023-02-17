@@ -1,36 +1,27 @@
-import numpy as np
-import pandas as pd
-import sklearn
-import pickle
 import recognition
-import math
-import matplotlib.pyplot as plt
 import cv2
 
 def faceRecognitionPipeline(img):
-    # Load all models
+    # Load face recogntion model
     haar = cv2.CascadeClassifier('./model/haarcascade_frontalface_default.xml')  # cascade classifier
 
-    # Create Pipeline
-    # step-01: read image
-    # img = cv2.imread('./test_images/03.jpg')  # BGR
-    # step-02: convert into gray scale
+    # Convert image to grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # step-03: crop the face (using haar cascase classifier)
+    # Detect all faces
     faces = haar.detectMultiScale(gray, 1.3, 5)
     predictions = []
+
+    # For position of each face:
     for x, y, w, h in faces:
-        # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
+        # Crop the face
         roi = gray[y:y+h, x:x+w]
-        if roi.shape[1] > 200:
-            roi_resize = cv2.resize(roi, (200, 200), cv2.INTER_AREA)
-        else:
-            roi_resize = cv2.resize(roi, (200, 200), cv2.INTER_CUBIC)
         
-        name, confidence = recognition.predict(roi)
-        text = f"{name} : {confidence:.0f}%"
+        # Predict the name of the face
+        name, dist = recognition.predict(roi)
+        text = f"{name} : {dist:.3f}"
         color = (255, 255, 0)
 
+        # Draw a rectangle around the face
         cv2.rectangle(img, (x, y), (x+w, y+h), color, 2)
         cv2.rectangle(img, (x, y-40), (x+w, y), color, -1)
         cv2.putText(img, text, (x, y), cv2.FONT_HERSHEY_PLAIN,
@@ -38,7 +29,7 @@ def faceRecognitionPipeline(img):
         output = {
             'roi': roi,
             'prediction_name': name,
-            'score': confidence
+            'score': dist
         }
 
         predictions.append(output)
